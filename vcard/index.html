@@ -1,0 +1,66 @@
+<!DOCTYPE html> 
+<html manifest="manifest.php">
+	<head>
+	<link rel="icon" type="image/png" href="../img/bluestar.png" />
+	<meta charset="utf-8" />
+	<title>Contact Download</title>
+	<meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	
+	<script src="jquery.js"></script>
+	<script src="jquery.mobile.js"></script>
+	<script src="offline.js"></script>
+	<link rel="stylesheet" href="mobile.css" />
+	<script language = "JavaScript">
+	if (document.all) {
+		   function customSetText(id, text)
+		   {
+				   document.getElementById(id).innerText = text;
+		   }
+	} else {
+		   function customSetText(id, text)
+		   {
+				   document.getElementById(id).firstChild.nodeValue = text;
+		   }
+	}
+
+	function showMail()
+	{
+	 var user = "besse";
+	 var domain = "cbesse.net";
+	 var mail = user + "@" + domain;
+	 var ref = "mailto:"+mail;
+
+		   customSetText('adresse',mail);
+		   document.getElementById('adresse').href=ref;
+	}
+	function hideMail()
+	{
+		   var message = "Email";
+
+		   customSetText('adresse',message);
+		   document.getElementById('adresse').href="#";
+	}
+	</script>
+	</head> 
+	
+    <body>
+        <div data-role="page">
+            <div data-role="header">
+                <h2>Download Contact</h2>
+            </div>
+            <div data-role="content">
+				<ul data-role="listview" data-inset="true">
+					<li data-icon="false"><a rel="external" href="download.php">Download Contact for iPhone</a></li>
+					<li data-icon="false"><a rel="external" href="cbesse.vcf">Download Contact for Android</a></li>
+					<li data-icon="false"><a rel="external" href="tel:+1-418-265-3039">Call</a></li>
+					<li data-icon="false"><a href="#" class="Style1" id="adresse" onMouseOver="showMail(1)" onMouseOut="hideMail(1)">Email</a></li>
+				</ul>
+            </div>
+            <div data-role="footer">
+                <h2>Mobile vCard Info. Camille Besse.</h2>
+            </div>
+        </div>
+    </body>
+</html>

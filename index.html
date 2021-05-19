@@ -29,29 +29,18 @@
 
 
   <script language = "JavaScript">
-    if (document.all) {
-           function customSetText(id, text)
-           {
-                   document.getElementById(id).innerText = text;
-           }
-    } else {
-           function customSetText(id, text)
-           {
-                   document.getElementById(id).firstChild.nodeValue = text;
-           }
-    }
-    function showMail()
+    function showMail(id)
     {
      var user = "besse";
      var domain = "cbesse.net";
      var mail = user + "@" + domain;
      var ref = "mailto:"+mail;
     
-           document.getElementById('adresse').href=ref;
+           document.getElementById(id).href=ref;
     }
-    function hideMail()
+    function hideMail(id)
     {
-           document.getElementById('adresse').href="#";
+           document.getElementById(id).href="#";
     }
     </script>
   <!-- =======================================================
@@ -95,7 +84,7 @@
 
         <ul class="list-unstyled list-social">
           <li >
-            <a href="#" id="adresse" onmouseover="showMail()" onmouseout="hideMail()">
+            <a href="#" id="adresse" onmouseover="showMail('adresse')" onmouseout="hideMail('adresse')">
               <i class="bi bi-envelope"></i>
             </a>
           </li>
@@ -283,7 +272,7 @@
 
         <ul class="list-unstyled">
           <li >
-            <a href="#" id="adresse" onmouseover="showMail()" onmouseout="hideMail()">
+            <a href="#" id="adresse2" onmouseover="showMail('adresse2')" onmouseout="hideMail('adresse2')">
               <i class="bi bi-envelope"></i>
             </a>
           </li>
@@ -315,7 +304,7 @@
         Licensing information: https://bootstrapmade.com/license/
         Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/buy/?theme=Folio
       -->
-        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+        Designed by <a href="https://bootstrapmade.com/">BootstrapMade.</a> Adapted by Camille Besse.
       </div>
 
     </div>

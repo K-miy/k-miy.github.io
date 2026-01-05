@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Générateur de Parler Creux™</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Work+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #1a1a2e;
+            --accent: #ffba08;
+            --secondary: #0f3460;
+            --text: #2d3748;
+            --light: #f7fafc;
+            --border: #e2e8f0;
+        }
+
+        body {
+            font-family: 'Work Sans', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            color: var(--text);
+        }
+
+        .container {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 1200px;
+            width: 100%;
+            padding: 3rem;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-family: 'DM Serif Display', serif;
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            line-height: 1.1;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: #718096;
+            margin-bottom: 2.5rem;
+            font-weight: 300;
+            font-style: italic;
+        }
+
+        .controls {
+            background: var(--light);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 2px solid var(--border);
+        }
+
+        .slider-container {
+            margin-bottom: 1.5rem;
+        }
+
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            color: var(--secondary);
+        }
+
+        .slider-value {
+            background: var(--accent);
+            color: var(--primary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: var(--border);
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
+            transition: transform 0.2s ease;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
+        }
+
+        .generate-btn {
+            width: 100%;
+            padding: 1.25rem 2rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: white;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Work Sans', sans-serif;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .generate-btn:active {
+            transform: translateY(0);
+        }
+
+        .output {
+            min-height: 200px;
+        }
+
+        .phrase {
+            background: linear-gradient(to right, #f7fafc, #edf2f7);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-radius: 12px;
+            border-left: 4px solid var(--accent);
+            font-size: 1.05rem;
+            line-height: 1.6;
+            color: var(--text);
+            animation: fadeInSlide 0.5s ease-out;
+            animation-fill-mode: both;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .phrase-text {
+            flex: 1;
+        }
+
+        .copy-btn {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.5rem 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+            color: var(--secondary);
+            font-weight: 500;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .copy-btn:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: var(--primary);
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(255, 186, 8, 0.3);
+        }
+
+        .copy-btn:active {
+            transform: translateY(0);
+        }
+
+        .copy-btn.copied {
+            background: #48bb78;
+            border-color: #48bb78;
+            color: white;
+        }
+
+        @keyframes fadeInSlide {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .phrase strong {
+            color: var(--secondary);
+            font-weight: 600;
+        }
+
+        .suggestions {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 2px solid var(--border);
+        }
+
+        .suggestions h3 {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .suggestion-box {
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+        }
+
+        .suggestion-box h4 {
+            color: var(--secondary);
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .suggestion-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tag {
+            background: white;
+            padding: 0.4rem 0.9rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: var(--secondary);
+            border: 1px solid var(--border);
+            font-weight: 400;
+        }
+
+        .tag.new {
+            background: var(--accent);
+            color: var(--primary);
+            border-color: var(--accent);
+            font-weight: 600;
+        }
+
+        .table-section {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 2px solid var(--border);
+        }
+
+        .table-section h3 {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .words-table {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .column {
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+        }
+
+        .column h4 {
+            color: var(--secondary);
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            text-align: center;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--accent);
+        }
+
+        .column ul {
+            list-style: none;
+        }
+
+        .column li {
+            padding: 0.4rem 0;
+            font-size: 0.85rem;
+            color: var(--text);
+            line-height: 1.4;
+        }
+
+        .column li.new-word {
+            color: var(--secondary);
+            font-weight: 500;
+        }
+
+        .footer {
+            margin-top: 2rem;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #a0aec0;
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 2rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .subtitle {
+                font-size: 1rem;
+            }
+
+            .words-table {
+                grid-template-columns: 1fr;
+            }
+
+            .phrase {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .copy-btn {
+                align-self: stretch;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Générateur de Parler Creux™</h1>
+        <p class="subtitle">L'art de ne rien dire avec éloquence</p>
+
+        <div class="controls">
+            <div class="slider-container">
+                <div class="slider-label">
+                    <span>Nombre de phrases</span>
+                    <span class="slider-value" id="sliderValue">5</span>
+                </div>
+                <input type="range" id="phraseCount" min="1" max="10" value="5">
+            </div>
+            <button class="generate-btn" onclick="generatePhrases()">
+                ✨ Générer le jargon
+            </button>
+        </div>
+
+        <div class="output" id="output"></div>
+
+        <div class="table-section">
+            <h3>📊 Tableau des mots utilisés</h3>
+            <p style="color: #718096; margin-bottom: 1.5rem; font-size: 0.95rem; text-align: center;">
+                Le générateur pioche aléatoirement un mot dans chaque colonne            </p>
+            
+            <div class="words-table">
+                <div class="column">
+                    <h4>Colonne 1<br>Sujets</h4>
+                    <ul id="col1-list"></ul>
+                </div>
+                <div class="column">
+                    <h4>Colonne 2<br>Verbes</h4>
+                    <ul id="col2-list"></ul>
+                </div>
+                <div class="column">
+                    <h4>Colonne 3<br>Objets</h4>
+                    <ul id="col3-list"></ul>
+                </div>
+                <div class="column">
+                    <h4>Colonne 4<br>Adjectifs</h4>
+                    <ul id="col4-list"></ul>
+                </div>
+                <div class="column">
+                    <h4>Colonne 5<br>Compléments</h4>
+                    <ul id="col5-list"></ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            Basé sur le classique "Parler Creux" • Version québécoise 2026
+        </div>
+    </div>
+
+    <script>
+        // Données originales + nouveaux mots québécois (sans anglicismes!)
+        const colonnes = {
+            col1: [
+                // Mots originaux
+                "L'excellence", "L'intervention", "L'objectif", "Le diagnostic",
+                "L'expérimentation", "La formation", "L'évaluation", "La finalité",
+                "L'expression", "Le management", "La méthode", "Le vécu", "Le recadrage",
+                // Nouveaux mots 2026 
+                "La transformation numérique", "L'agilité", "La disruption", "L'innovation",
+                "L'écosystème", "Les données", "L'intelligence artificielle", "La résilience"
+            ],
+            col2: [
+                // Mots originaux
+                "renforce", "mobilise", "révèle", "stimule", "modifie", "clarifie",
+                "renouvelle", "identifie", "perfectionne", "développe", "dynamise",
+                "programme", "ponctue",
+                // Nouveaux mots 2026
+                "optimise", "numérise", "transforme", "impacte", "rend évolutif",
+                "disrupte", "compare", "réoriente"
+            ],
+            col3: [
+                // Mots originaux
+                "les facteurs", "les processus", "les paramètres", "les changements",
+                "les concepts", "les savoir-faire", "les problèmes", "les indicateurs",
+                "les résultats", "les effets", "les blocages", "les besoins", "les paradoxes",
+                // Nouveaux mots 2026
+                "les synergies", "les KPIs", "les leviers", "les méthodologies",
+                "les ressources", "les constats", "les livrables", "les cas d'utilisation"
+            ],
+            col4: [
+                // Mots originaux
+                "institutionnels", "organisationnels", "qualitatifs", "analytiques",
+                "caractéristiques", "motivationnels", "pédagogiques", "représentatifs",
+                "participatifs", "cumulatifs", "stratégiques", "neuro-linguistiques", "systémiques",
+                // Nouveaux mots 2026
+                "novateurs", "souples", "numériques", "transversaux",
+                "axés sur les données", "collaboratifs", "évolutifs", "centrés sur l'utilisateur"
+            ],
+            col5: [
+                // Mots originaux
+                "de la performance", "du dispositif", "de l'entreprise", "du groupe",
+                "du projet", "des bénéficiaires", "de la hiérarchie", "des pratiques",
+                "de la démarche", "des acteurs", "de la problématique", "des structures",
+                "du méta-contexte",
+                // Nouveaux mots 2026
+                "de l'organisation", "du numérique", "de l'innovation", "de l'expérience utilisateur",
+                "de la feuille de route", "de l'écosystème", "du cadre", "de la proposition de valeur"
+            ]
+        };
+
+        // Nombre de mots originaux dans chaque colonne (pour marquer les nouveaux)
+        const originalCounts = {
+            col1: 13,
+            col2: 13,
+            col3: 13,
+            col4: 13,
+            col5: 13
+        };
+
+        // Afficher le tableau des mots
+        function displayWordsTable() {
+            Object.keys(colonnes).forEach(colKey => {
+                const listElement = document.getElementById(`${colKey}-list`);
+                colonnes[colKey].forEach((word, index) => {
+                    const li = document.createElement('li');
+                    li.textContent = word;
+                    // Marquer les nouveaux mots
+                    if (index >= originalCounts[colKey]) {
+                        li.className = 'new-word';
+                    }
+                    listElement.appendChild(li);
+                });
+            });
+        }
+
+        // Mise à jour de l'affichage du slider
+        const slider = document.getElementById('phraseCount');
+        const sliderValue = document.getElementById('sliderValue');
+        
+        slider.addEventListener('input', (e) => {
+            sliderValue.textContent = e.target.value;
+        });
+
+        function getRandomElement(array) {
+            return array[Math.floor(Math.random() * array.length)];
+        }
+
+        function generatePhrase() {
+            const c1 = getRandomElement(colonnes.col1);
+            const c2 = getRandomElement(colonnes.col2);
+            const c3 = getRandomElement(colonnes.col3);
+            const c4 = getRandomElement(colonnes.col4);
+            const c5 = getRandomElement(colonnes.col5);
+            
+            return `<strong>${c1}</strong> ${c2} ${c3} ${c4} ${c5}.`;
+        }
+
+        function copyToClipboard(text, button) {
+            // Enlever les balises HTML
+            const plainText = text.replace(/<[^>]*>/g, '');
+            
+            navigator.clipboard.writeText(plainText).then(() => {
+                // Feedback visuel
+                const originalText = button.textContent;
+                button.textContent = '✓ Copié!';
+                button.classList.add('copied');
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                console.error('Erreur de copie:', err);
+                button.textContent = '✗ Erreur';
+                setTimeout(() => {
+                    button.textContent = '📋 Copier';
+                }, 2000);
+            });
+        }
+
+        function generatePhrases() {
+            const count = parseInt(slider.value);
+            const output = document.getElementById('output');
+            output.innerHTML = '';
+
+            for (let i = 0; i < count; i++) {
+                const phraseDiv = document.createElement('div');
+                phraseDiv.className = 'phrase';
+                phraseDiv.style.animationDelay = `${i * 0.1}s`;
+                
+                const phraseText = generatePhrase();
+                
+                phraseDiv.innerHTML = `
+                    <div class="phrase-text">${phraseText}</div>
+                    <button class="copy-btn" onclick="copyToClipboard('${phraseText.replace(/'/g, "\\'")}', this)">📋 Copier</button>
+                `;
+                
+                output.appendChild(phraseDiv);
+            }
+        }
+
+        // Initialisation au chargement
+        window.addEventListener('load', () => {
+            displayWordsTable();
+            setTimeout(generatePhrases, 300);
+        });
+    </script>
+</body>
+</html>
